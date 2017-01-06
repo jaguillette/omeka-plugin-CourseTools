@@ -5,7 +5,8 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
   protected $_hooks = array(
     'admin_head',
     'config_form',
-    'config'
+    'config',
+    'define_acl'
   );
 
   public function hookConfigForm($args)
@@ -21,6 +22,29 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
   public function hookAdminHead($args)
   {
     queue_css_string($this->make_disabling_css());
+  }
+
+  public function hookDefineAcl($args)
+  {
+    $acl = $args['acl'];
+
+    # Define available content_types
+    $content_types = array('Items','Collections');
+    if ($acl->has('ExhibitBuilder_Exhibits')) {
+      array_push($content_types, 'ExhibitBuilder_Exhibits');
+    }
+    if ($acl->has('Neatline_Exhibits')) {
+      array_push($content_types, 'Neatline_Exhibits');
+    }
+
+    # Add new role, student, which inherits from contributor, and allow the role
+    # to make own content public.
+    $acl->addRole('student','contributor');
+    $acl->allow('student', $content_types, 'makePublic', new Omeka_Acl_Assert_Ownership);
+
+    # Add a new role, reviewer, which has more permissions to view non-public content
+    $acl->addRole('reviewer','researcher');
+    $acl->allow('reviewer', $content_types, 'showNotPublic');
   }
 
   public function setOptions($options)
