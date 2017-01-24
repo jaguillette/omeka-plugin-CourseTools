@@ -7,6 +7,16 @@
 .permission-label {text-align: center; width: 32.5%; display: inline-block;}
 .permission-labels {float: right;}
 </style>
+<div class="plugin-description">
+  <h2>Plugin Description</h2>
+  <p>This plugin adds two roles to Omeka, the "student" role and the "reviewer"
+    role.</p>
+  <p>Student permissions are defined on this page, and are updated as soon as
+    they are saved here.</p>
+  <p>Reviewer permissions are simply set to more permissive researcher
+    permissions. Reviewers can view, but not edit, any content on the site,
+    including Exhibits and Neatline exhibits.</p>
+</div>
 <div class="set-permissions" style="display:inline-block;">
   <h2><?php echo __("Set Permissions for Students"); ?></h2>
   <p class="explanation"><?php echo __("Select what permissions students should have for each type of content."); ?></p>
