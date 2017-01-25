@@ -115,11 +115,12 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
       "delete|Items" => "body.items .delete-confirm { display:none; }",
       "delete|Collections" => "body.collections .delete-confirm { display:none; }",
       "delete|ExhibitBuilder_Exhibits" => "body.exhibits .delete-confirm { display:none; }",
-      "delete|Neatline_Exhibits" => "table.neatline .delete-confirm { display:none; }"
+      "delete|Neatline_Exhibits" => "table.neatline .delete-confirm { display:none; }",
+      "create-edit|Neatline_Exhibits" => "a.add[href$='neatline/add'] { display:none; }",
     );
     $style = "";
     foreach ($disable_array as $key => $value) {
-      if (get_option($key)) {
+      if (get_option($key)=='none') {
         $style .= $value;
       }
     }
