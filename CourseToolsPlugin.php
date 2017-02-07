@@ -51,6 +51,11 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     $acl->allow('student','Files','editSelf');
     $acl->allow('student','Tags',array('autocomplete'));
 
+    # Set student permissions on Simple Pages
+    if (get_option('simple-page-access')) {
+      $acl->allow('student', array('SimplePages_Index', 'SimplePages_Page'));
+    }
+
     # Iterate through available content types
     foreach ($this->active_content_types as $content_type) {
       $all_permissions = array();

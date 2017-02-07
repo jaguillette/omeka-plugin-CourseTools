@@ -45,4 +45,12 @@
       </div>
     <?php endforeach; ?>
   <?php endforeach; ?>
+  <div class="simple-page-switch">
+    <h3>Simple Pages</h3>
+    <p>Allow students to have access to Simple Pages. If enabled, students will have access to view, edit, and create all Simple Pages.</p>
+    <div class="three columns alpha"><label for="simple-page-access">Students can edit all Simple Pages:</label></div>
+    <div class="four columns omega">
+      <?php echo get_view()->formCheckbox('simple-page-access', null, array('checked'=>get_option('simple-page-access'))); ?>
+    </div>
+  </div>
 </div>
