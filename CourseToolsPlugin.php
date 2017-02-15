@@ -46,10 +46,11 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     # Add role, no inherited permissions other than global.
     $acl->addRole('student');
 
-    # Allow students to edit own files, autocomplete tags.
+    # Allow students to edit own files, autocomplete tags, access additional elements.
     # These permissions don't fit into the defined permissions, but are needed.
     $acl->allow('student','Files','editSelf');
     $acl->allow('student','Tags',array('autocomplete'));
+    $acl->allow('student', 'Elements', 'element-form');
 
     # Set student permissions on Simple Pages
     if (get_option('simple-page-access')) {
@@ -175,11 +176,11 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
             'all'=>array(
               array(
                 'resource'=>'Neatline_Exhibits',
-                'permissions'=>array('edit','editor','put','import','showNotPublic')
+                'permissions'=>array('add','edit','editor','put','import','showNotPublic')
               ),
               array(
                 'resource'=>'Neatline_Records',
-                'permissions'=>array('post','put')
+                'permissions'=>array('post','put','delete','delete-confirm')
               )
             ),
             'own'=>array(
@@ -196,11 +197,11 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
               ),
               array(
                 'resource'=>'Neatline_Exhibits',
-                'permissions'=>array('showSelfNotPublic','editSelf','editorSelf','putSelf','importSelf','deleteSelf')
+                'permissions'=>array('add','showSelfNotPublic','editSelf','editorSelf','putSelf','importSelf','deleteSelf')
               ),
               array(
                 'resource'=>'Neatline_Records',
-                'permissions'=>array('postSelf','putSelf')
+                'permissions'=>array('postSelf','putSelf','delete','delete-confirm')
               )
             )
           ),
@@ -258,6 +259,31 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
                         preventing accidental deletion of projects close to
                         deadlines.",
         'permissions'=>array(
+          'Neatline_Exhibits'=>array(
+            'all'=>array(
+              array(
+                'resource'=>'Neatline_Exhibits',
+                'permissions'=>array('delete','delete-confirm')
+              ),
+              array(
+                'resource'=>'Neatline_Records',
+                'permissions'=>array('delete','delete-confirm')
+              )
+            ),
+            'own'=>array(
+              array(
+                'resource'=>'Neatline_Exhibits',
+                'permissions'=>array('delete','delete-confirm'),
+                'assertion'=>'Omeka_Acl_Assert_Ownership'
+              ),
+              array(
+                'resource'=>'Neatline_Records',
+                'permissions'=>array('delete','delete-confirm'),
+                // 'assertion'=>'Neatline_Acl_Assert_RecordOwnership'
+                // Assertion above seems to be part of Neatline's permissions, but bugs out when implemented
+              )
+            )
+          ),
           'default'=>array(
             'all'=>array('delete','delete-confirm'),
             'own'=>array('deleteSelf','delete-confirm')
