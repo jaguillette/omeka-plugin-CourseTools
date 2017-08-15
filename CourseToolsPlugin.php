@@ -106,6 +106,8 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     foreach ($this->active_content_types as $active_type) {
       $acl->allow('reviewer', $this->content_types[$active_type]['resources'], 'showNotPublic');
     }
+    
+    $acl->allow(array('student','reviewer'), 'Users', null, new Omeka_Acl_Assert_User);
   }
 
   public function setOptions($options)
