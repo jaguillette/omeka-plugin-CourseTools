@@ -53,8 +53,10 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     $acl->allow('student', 'Elements', 'element-form');
 
     # Set student permissions on Simple Pages
-    if (get_option('simple-page-access')) {
-      $acl->allow('student', array('SimplePages_Index', 'SimplePages_Page'));
+    if (plugin_is_active("SimplePages")) {
+      if (get_option('simple-page-access')) {
+        $acl->allow('student', array('SimplePages_Index', 'SimplePages_Page'));
+      }
     }
 
     # Iterate through available content types
@@ -106,7 +108,7 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     foreach ($this->active_content_types as $active_type) {
       $acl->allow('reviewer', $this->content_types[$active_type]['resources'], 'showNotPublic');
     }
-    
+
     $acl->allow(array('student','reviewer'), 'Users', null, new Omeka_Acl_Assert_User);
   }
 

@@ -39,12 +39,14 @@
         <div class="four columns omega">
           <?php
             // echo get_view()->formRadio($id, $value, $attribs, $options, $listsep);
-            echo get_view()->formRadio($keytype, get_option($keytype), array('class'=>'columns omega'), array('all'=>'','own'=>'','none'=>''),"");
+            $keyValue = (get_option($keytype)!=null)?get_option($keytype):"own";
+            echo get_view()->formRadio($keytype, $keyValue, array('class'=>'columns omega'), array('all'=>'','own'=>'','none'=>''),"");
           ?>
         </div>
       </div>
     <?php endforeach; ?>
   <?php endforeach; ?>
+  <?php if (plugin_is_active("SimplePages")): ?>
   <div class="simple-page-switch">
     <h3>Simple Pages</h3>
     <p>Allow students to have access to Simple Pages. If enabled, students will have access to view, edit, and create all Simple Pages.</p>
@@ -53,4 +55,5 @@
       <?php echo get_view()->formCheckbox('simple-page-access', null, array('checked'=>get_option('simple-page-access'))); ?>
     </div>
   </div>
+  <?php endif; ?>
 </div>
