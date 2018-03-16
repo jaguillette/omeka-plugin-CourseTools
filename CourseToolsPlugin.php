@@ -53,7 +53,7 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
     $acl->allow('student', 'Elements', 'element-form');
 
     # Set student permissions on Simple Pages
-    if (plugin_is_active("SimplePages")) {
+    if ($acl->has('SimplePages_Index') && $acl->has('SimplePages_Page')) {
       if (get_option('simple-page-access')) {
         $acl->allow('student', array('SimplePages_Index', 'SimplePages_Page'));
       }
