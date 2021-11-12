@@ -48,9 +48,13 @@ class CourseToolsPlugin extends Omeka_Plugin_AbstractPlugin
 
     # Allow students to edit own files, autocomplete tags, access additional elements.
     # These permissions don't fit into the defined permissions, but are needed.
-    $acl->allow('student','Files','editSelf');
-    $acl->allow('student','Tags',array('autocomplete'));
+    $acl->allow('student', 'Files', 'editSelf');
+    $acl->allow('student', 'Tags', array('autocomplete'));
     $acl->allow('student', 'Elements', 'element-form');
+    # Allow students access to cover images if Exhibit Builder is installed
+    if ($acl->has('ExhibitBuilder_Files')) {
+      $acl->allow('student', 'ExhibitBuilder_Files', 'cover-image');
+    }
 
     # Set student permissions on Simple Pages
     if ($acl->has('SimplePages_Index') && $acl->has('SimplePages_Page')) {
