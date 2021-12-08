@@ -1,12 +1,39 @@
 <style>
-.content-type.permission {display: inline-block;}
-.debug {position: absolute; top:45px; left: 20px; z-index: 10; background-color: white;}
-.permission input {margin: 0 45%;}
-.permission label {width: 33%; display: inline-block;}
-.permission label.row-label {width: 100%;}
-.permission-label {text-align: center; width: 32.5%; display: inline-block;}
-.permission-labels {float: right;}
+  .content-type.permission {
+    display: inline-block;
+  }
+  .debug {
+    position: absolute; 
+    top:45px; left: 20px; 
+    z-index: 10; 
+    background-color: white;
+  }
+  .permission label {
+    width: 33%; 
+    display: inline-block;
+  }
+  .permission label.row-label {
+    width: 100%;
+  }
+  .permission-label {
+    text-align: center; 
+    width: 32.5%; 
+    display: inline-block;
+  }
+  .permission-labels {
+    float: right;
+  }
+  .permission-input {
+    width: 32.5%;
+    display: inline-block;
+    text-align: center;
+  }
+  .permission-input input {
+    display: inline-block;
+    float: none;
+  }
 </style>
+
 <div class="plugin-description">
   <h2>Plugin Description</h2>
   <p>This plugin adds two roles to Omeka, the "student" role and the "reviewer"
@@ -17,30 +44,40 @@
     permissions. Reviewers can view, but not edit, any content on the site,
     including Exhibits and Neatline exhibits.</p>
 </div>
+
 <div class="set-permissions" style="display:inline-block;">
   <h2><?php echo __("Set Permissions for Students"); ?></h2>
   <p class="explanation"><?php echo __("Select what permissions students should have for each type of content."); ?></p>
   <?php
-  foreach ($permissions as $key => $value): ?>
-    <h3><?php echo $value['title']; ?></h3>
-    <p class="explanation"><?php echo $value['description']; ?></p>
+  foreach ($permissions as $permissionName => $permissionProperties): ?>
+    <h3><?php echo $permissionProperties['title']; ?></h3>
+    <p class="explanation"><?php echo $permissionProperties['description']; ?></p>
     <div class="four columns alpha omega permission-labels">
       <div class="permission-label">All</div>
       <div class="permission-label">Own</div>
       <div class="permission-label">None</div>
     </div>
-    <?php foreach ($active_content_types as $type):
-      $keytype = "$key|$type";
-      $label = $content_types[$type]['label']; ?>
+    <?php foreach ($active_content_types as $contentType):
+      $permissionForContentType = "$permissionName|$contentType";
+      $label = $content_types[$contentType]['label']; ?>
       <div class="content-type permission">
         <div class="three columns alpha">
-          <label class="row-label" for="<?php echo $keytype; ?>"><?php echo $label; ?></label>
+          <label class="row-label" for="<?php echo $permissionForContentType; ?>"><?php echo $label; ?></label>
         </div>
         <div class="four columns omega">
           <?php
-            // echo get_view()->formRadio($id, $value, $attribs, $options, $listsep);
-            $keyValue = (get_option($keytype)!=null)?get_option($keytype):"own";
-            echo get_view()->formRadio($keytype, $keyValue, array('class'=>'columns omega'), array('all'=>'','own'=>'','none'=>''),"");
+            $activePermissionForContentType = (get_option($permissionForContentType)!=null) ? get_option($permissionForContentType) : "own";
+            foreach(array('all', 'own', 'none') as $permissionOption) {
+              $checked = ($activePermissionForContentType == $permissionOption) ? ' checked="checked" ' : '';
+              if ($permissionOption == 'none') {
+                $ariaLabel = "Do not allow " . $permissionName . " on " . $contentType;
+              } else {
+                $ariaLabel = "Allow " . $permissionName . " on " . $permissionOption . " " . $contentType;
+              }
+              echo('<div class="permission-input">
+              <input type="radio" name="' . $permissionForContentType . '" value="' . $permissionOption . '" aria-label="' . $ariaLabel . '"' . $checked . '>
+              </div>');
+            }
           ?>
         </div>
       </div>
